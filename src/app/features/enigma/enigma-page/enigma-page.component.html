@@ -1,0 +1,39 @@
+<div class="enigma-page">
+  @if (enigma()) {
+    <div class="enigma-container">
+      <h2>Enigma {{ enigma()?.id }}</h2>
+      <div class="question">
+        <p>{{ enigma()?.question }}</p>
+      </div>
+      <div class="answer-section">
+        <input
+          type="text"
+          [(ngModel)]="userAnswer"
+          (keyup.enter)="onSubmit()"
+          placeholder="Digite sua resposta"
+          class="answer-input"
+        />
+        <button (click)="onSubmit()" class="submit-btn">Enviar</button>
+      </div>
+      @if (showHint()) {
+        <div class="hint-section">
+          <p><strong>Dica:</strong> {{ enigma()?.hint }}</p>
+        </div>
+      }
+
+      @if (enigma()?.hint) {
+        <button (click)="toggleHint()" class="hint-btn">Mostrar Dica</button>
+      }
+
+      @if (feedback) {
+        <div class="feedback">
+          <p [class.correct]="isCorrect" [class.incorrect]="!isCorrect">{{ feedback }}</p>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="loading-container">
+      <p>Carregando enigma...</p>
+    </div>
+  }
+</div>

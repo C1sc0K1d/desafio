@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+:host {
+  overflow: hidden;
+  display: block;
+  height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  /* Esconder no Chrome, Safari e Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Esconder no IE e Edge */
+  -ms-overflow-style: none;
+
+  /* Esconder no Firefox */
+  scrollbar-width: none;
+
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}

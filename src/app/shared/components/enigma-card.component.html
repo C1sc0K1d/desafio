@@ -1,0 +1,45 @@
+<div class="enigma-card" [class.solved]="isSolved()">
+  <div class="enigma-header">
+    <div class="enigma-number">Enigma #{{ enigma().id }}</div>
+    <div class="enigma-type-badge">{{ enigma().type }}</div>
+    @if (isSolved()) {
+      <div class="letter-revealed">✓ Letra: <span class="letter">{{ enigma().letter }}</span></div>
+    }
+  </div>
+
+  <div class="enigma-content">
+    <p class="question">{{ enigma().question }}</p>
+
+    @if (!isSolved()) {
+      <div class="input-section">
+        <input
+          [(ngModel)]="userAnswer"
+          (keyup.enter)="submitAnswer()"
+          type="text"
+          placeholder="Digite sua resposta..."
+          [disabled]="isSubmitting()"
+          class="answer-input"
+        />
+        <button
+          (click)="submitAnswer()"
+          [disabled]="!userAnswer || isSubmitting()"
+          class="submit-btn"
+        >
+          {{ isSubmitting() ? 'Verificando...' : 'Enviar' }}
+        </button>
+      </div>
+
+      @if (showHint()) {
+        <p class="hint">💡 Dica: {{ enigma().hint }}</p>
+      }
+
+      @if (showError()) {
+        <p class="error">❌ Resposta errada. Tente novamente!</p>
+      }
+
+      <button (click)="toggleHint()" class="hint-btn">
+        {{ showHint() ? 'Ocultar Dica' : 'Mostrar Dica' }}
+      </button>
+    }
+  </div>
+</div>

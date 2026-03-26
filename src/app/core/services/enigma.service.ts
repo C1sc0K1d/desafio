@@ -8,6 +8,7 @@ export interface Enigma {
   answer: string; // The correct answer (case-insensitive)
   hint?: string;
   image?: string; // For visual enigmas with hidden text/objects
+  audio?: string; // For enigmas with audio clues
 }
 
 @Injectable({
@@ -19,7 +20,7 @@ export class EnigmaService {
       id: 1,
       letter: 'E',
       type: 'riddle',
-      question: 'Sou um espelho e na maioria da vezes só mostro o que deseja ver, as vezes mostro a verdade, mas nem sempre é o que você quer. O que sou?',
+      question: 'Sou um espelho quee na maioria da vezes só mostro o que deseja ver, as vezes mostro a verdade, mas nem sempre é o que você quer. O que sou?',
       answer: 'tela',
       hint: 'KKKK, achou mesmo que teria dica?'
     },
@@ -34,58 +35,67 @@ export class EnigmaService {
     {
       id: 3,
       letter: 'T',
-      type: 'riddle',
-      question: 'Estou sempre com fome e preciso ser alimentado, mas se você me der água, morrerei. O que sou?',
-      answer: 'fogo',
-      hint: 'NUM TEM'
+      type: 'enigma',
+      question: '08:42 - 02:50',
+      answer: 'free',
+      hint: 'kkkkkkk, desiste, não tem dica, é só pra te trollar mesmo',
+      image: '/assets/images/enigma3.jpg'
     },
     {
       id: 4,
       letter: 'E',
-      type: 'pattern',
-      question: 'Complete o padrão: A, B, C, E, F, G, I, J, K, ?',
-      answer: 'M',
-      hint: 'Qual letra vem depois de cada grupo?'
+      type: 'enigma',
+      question: 'Propriedades',
+      answer: 'alger',
+      hint: 'Eu te amo muito namorada, mas naum tem dica não.',
+      image: '/assets/images/NatalMichigan.jpg'
     },
     {
       id: 5,
       letter: 'A',
       type: 'riddle',
-      question: 'Tenho cidades, mas não casas. Tenho montanhas, mas não árvores. Tenho água, mas não peixes. O que sou?',
-      answer: 'mapa',
-      hint: 'Ajuda você a navegar'
+      question: 'espectograma 5 | 5',
+      answer: 'alexandre',
+      hint: 'you',
+      audio: '/assets/audio/jarro.mp3'
     },
     {
       id: 6,
       letter: 'M',
       type: 'math',
-      question: 'Se um caderno custa R$5 e uma caneta custa R$3, quanto custam 2 cadernos e 4 canetas?',
-      answer: '22',
-      hint: 'Faça a matemática passo a passo'
+      question: '40°29′N 20°11′E',
+      answer: '661',
+      hint: '...',
+      image: '/assets/images/brilho.png'
     },
     {
       id: 7,
       letter: 'O',
       type: 'riddle',
-      question: 'Não estou vivo, mas cresço; não tenho pulmões, mas preciso de ar. O que sou?',
-      answer: 'fogo',
-      hint: 'Quente e tremeluzente'
+      question: 'what thumb?',
+      answer: 'hitchhiker',
+      hint: 'tu',
+      image: '/assets/images/gift.png'
     },
     {
       id: 8,
       letter: 'M',
       type: 'pattern',
-      question: 'O que vem a seguir? 1, 1, 2, 3, 5, 8, 13, ?',
-      answer: '21',
-      hint: 'Famosa sequência matemática'
+      question: '...- .- .-.. --- .-. .- -. -',
+      answer: 'china',
+      hint: 'be',
+      audio: '/assets/audio/lightspeed.mp3'
     },
     {
       id: 9,
       letter: 'U',
       type: 'trivia',
-      question: 'Em que ano foi lançado o primeiro iPhone?',
-      answer: '2007',
-      hint: 'Jobs o apresentou'
+      question: `primeiro iPhone
+Steve Jobs
+video
+ano`,
+      answer: '2023',
+      hint: 'https://www.youtube.com/shorts/iys1AhuUheI'
     },
     {
       id: 10,
@@ -93,15 +103,15 @@ export class EnigmaService {
       type: 'riddle',
       question: 'O que tem mãos mas não pode bater palmas?',
       answer: 'relógio',
-      hint: 'Mede o tempo'
+      hint: 'não, sem dica ainda'
     },
     {
       id: 11,
       letter: 'T',
-      type: 'math',
-      question: 'Qual é a raiz quadrada de 144?',
-      answer: '12',
-      hint: 'Um número vezes ele mesmo é igual a 144'
+      type: 'trivia',
+      question: 'Lugar que eu te pedi em namoro?',
+      answer: 'igarata',
+      hint: '5, 7, 8, dicas.'
     }
   ];
 
@@ -147,11 +157,21 @@ export class EnigmaService {
     return this.enigmas.find(e => e.id === id);
   }
 
+  private normalizeText(text: string): string {
+    return text
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .trim();
+  }
+
   checkAnswer(enigmaId: number, userAnswer: string): boolean {
     const enigma = this.getEnigmaById(enigmaId);
     if (!enigma) return false;
 
-    const isCorrect = userAnswer.toLowerCase().trim() === enigma.answer.toLowerCase();
+    const normalizedUserAnswer = this.normalizeText(userAnswer);
+    const normalizedCorrectAnswer = this.normalizeText(enigma.answer);
+    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
 
     if (isCorrect && !this.solvedEnigmas().includes(enigmaId)) {
       this.solvedEnigmas.update(solved => [...solved, enigmaId]);

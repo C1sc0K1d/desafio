@@ -2,6 +2,16 @@
   @if (enigma()) {
     <div class="enigma-container">
       <h2>Enigma {{ enigma()?.id }}</h2>
+      @if (enigma()?.image) {
+        <div class="enigma-image">
+          <img [src]="enigma()?.image" [alt]="'Enigma ' + enigma()?.id" />
+        </div>
+      }
+      @if (enigma()?.audio) {
+        <div class="enigma-audio">
+          <audio controls [src]="enigma()?.audio"></audio>
+        </div>
+      }
       <div class="question">
         <p>{{ enigma()?.question }}</p>
       </div>

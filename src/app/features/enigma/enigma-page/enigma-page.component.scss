@@ -13,6 +13,20 @@
   box-sizing: border-box;
 }
 
+.enigma-image {
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.enigma-image img {
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.25);
+  max-height: 220px;
+  object-fit: cover;
+}
+
 @media (max-width: 599px) {
   .enigma-page {
     align-items: center;
@@ -35,6 +49,7 @@
   font-size: 1.1rem;
   color: #f0f0f0;
   line-height: 1.5;
+  white-space: pre-line;
 }
 
 .answer-input {

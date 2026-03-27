@@ -46,7 +46,7 @@ export class EnigmaPageComponent implements OnInit {
 
         // Se ID é inválido, vai para o primeiro
         if (id < 1 || id > 11) {
-          const lastSolvedId = solvedEnigmas.length > 0 ? Math.max(...solvedEnigmas) : solvedEnigmas.length == 12 ? Math.max(...solvedEnigmas) : 1;
+          const lastSolvedId = nextAllowed;
           console.log('Redirecting to last solved or allowed:', lastSolvedId);
           this.router.navigate(['/enigma', lastSolvedId], { replaceUrl: true });
           return;
@@ -82,9 +82,9 @@ export class EnigmaPageComponent implements OnInit {
         }
 
         // Caso contrário, redireciona para o último enigma resolvido ou para o próximo permitido
-        const lastSolvedId = solvedEnigmas.length > 0 ? Math.max(...solvedEnigmas) : solvedEnigmas.length == 12 ? Math.max(...solvedEnigmas) : 1;
+        const lastSolvedId = nextAllowed;
         console.log('Redirecting to last solved or allowed:', lastSolvedId);
-        this.router.navigate(['/enigma', lastSolvedId + 1], { replaceUrl: true });
+        this.router.navigate(['/enigma', lastSolvedId], { replaceUrl: true });
       }
     });
   }

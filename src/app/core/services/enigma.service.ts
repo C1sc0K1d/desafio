@@ -102,7 +102,7 @@ ano`,
       id: 10,
       letter: 'p',
       type: 'riddle',
-      question: 'A resposta é a palavra do Wordle de hioje',
+      question: 'A resposta é a palavra do Wordle de hoje',
       answer: 'relógio',
       hint: 'não, sem dica ainda'
     },

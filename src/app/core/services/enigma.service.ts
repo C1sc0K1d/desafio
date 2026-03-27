@@ -1,4 +1,5 @@
 import { afterNextRender, effect, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 export interface Enigma {
   id: number;
@@ -18,15 +19,15 @@ export class EnigmaService {
   private enigmas: Enigma[] = [
     {
       id: 1,
-      letter: 'E',
+      letter: 'c',
       type: 'riddle',
-      question: 'Sou um espelho quee na maioria da vezes só mostro o que deseja ver, as vezes mostro a verdade, mas nem sempre é o que você quer. O que sou?',
+      question: 'Sou um espelho, e na maioria da vezes só mostro o que deseja ver, as vezes mostro a verdade, mas nem sempre é o que você quer. O que sou?',
       answer: 'tela',
       hint: 'KKKK, achou mesmo que teria dica?'
     },
     {
       id: 2,
-      letter: 'U',
+      letter: 'c',
       type: 'math',
       question: 'Japones dos 400 metros nasceu, 2023 foi prata',
       answer: '1996',
@@ -34,7 +35,7 @@ export class EnigmaService {
     },
     {
       id: 3,
-      letter: 'T',
+      letter: 'h',
       type: 'enigma',
       question: '08:42 - 02:50',
       answer: 'free',
@@ -43,7 +44,7 @@ export class EnigmaService {
     },
     {
       id: 4,
-      letter: 'E',
+      letter: '1',
       type: 'enigma',
       question: 'Propriedades',
       answer: 'alger',
@@ -52,7 +53,7 @@ export class EnigmaService {
     },
     {
       id: 5,
-      letter: 'A',
+      letter: 'V',
       type: 'riddle',
       question: 'espectograma 5 | 5',
       answer: 'alexandre',
@@ -61,7 +62,7 @@ export class EnigmaService {
     },
     {
       id: 6,
-      letter: 'M',
+      letter: 'n',
       type: 'math',
       question: '40°29′N 20°11′E',
       answer: '661',
@@ -70,7 +71,7 @@ export class EnigmaService {
     },
     {
       id: 7,
-      letter: 'O',
+      letter: 'C',
       type: 'riddle',
       question: 'what thumb?',
       answer: 'hitchhiker',
@@ -79,7 +80,7 @@ export class EnigmaService {
     },
     {
       id: 8,
-      letter: 'M',
+      letter: '6',
       type: 'pattern',
       question: '...- .- .-.. --- .-. .- -. -',
       answer: 'china',
@@ -88,7 +89,7 @@ export class EnigmaService {
     },
     {
       id: 9,
-      letter: 'U',
+      letter: '-',
       type: 'trivia',
       question: `primeiro iPhone
 Steve Jobs
@@ -99,15 +100,15 @@ ano`,
     },
     {
       id: 10,
-      letter: 'I',
+      letter: 'p',
       type: 'riddle',
-      question: 'O que tem mãos mas não pode bater palmas?',
+      question: 'A resposta é a palavra do Wordle de hioje',
       answer: 'relógio',
       hint: 'não, sem dica ainda'
     },
     {
       id: 11,
-      letter: 'T',
+      letter: 'U',
       type: 'trivia',
       question: 'Lugar que eu te pedi em namoro?',
       answer: 'igarata',
@@ -118,7 +119,7 @@ ano`,
   private solvedEnigmas = signal<number[]>([]);
   private readonly isBrowser = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // 1. CARREGAMENTO: Só executa no Navegador, após o SSR
     afterNextRender(() => {
       const saved = localStorage.getItem('solvedEnigmas');
@@ -133,6 +134,22 @@ ano`,
           console.warn('Erro ao carregar cache:', e);
         }
       }
+
+      // Fetch Wordle solution for enigma 10
+      const today = new Date().toISOString().slice(0, 10);
+      const url = `https://api.allorigins.win/raw?url=https://www.nytimes.com/svc/wordle/v2/${today}.json`;
+      this.http.get<{solution: string}>(url).subscribe({
+        next: (data) => {
+          const enigma = this.enigmas.find(e => e.id === 10);
+          if (enigma) {
+            enigma.answer = data.solution;
+            console.log('Enigma 10 answer updated to:', data.solution);
+          }
+        },
+        error: (err) => {
+          console.warn('Failed to fetch Wordle solution:', err);
+        }
+      });
     });
 
     // 2. SALVAMENTO AUTOMÁTICO: Sempre que o Signal mudar, ele salva no cache

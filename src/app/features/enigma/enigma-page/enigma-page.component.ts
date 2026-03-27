@@ -44,17 +44,11 @@ export class EnigmaPageComponent implements OnInit {
         let nextAllowed = solvedCount + 1;
         console.log('Next allowed:', nextAllowed);
 
-        // Se todos os enigmas foram resolvidos, vai para final
-        if (this.enigmaService.getAllSolved()) {
-          console.log('All solved, going to final');
-          this.router.navigate(['/final']);
-          return;
-        }
-
         // Se ID é inválido, vai para o primeiro
         if (id < 1 || id > 11) {
-          console.log('ID out of range, redirecting to enigma 1');
-          this.router.navigate(['/enigma', 1], { replaceUrl: true });
+          const lastSolvedId = solvedEnigmas.length > 0 ? Math.max(...solvedEnigmas) : solvedEnigmas.length == 12 ? Math.max(...solvedEnigmas) : 1;
+          console.log('Redirecting to last solved or allowed:', lastSolvedId);
+          this.router.navigate(['/enigma', lastSolvedId], { replaceUrl: true });
           return;
         }
 
@@ -69,6 +63,13 @@ export class EnigmaPageComponent implements OnInit {
           }
         }
 
+        // Se todos os enigmas foram resolvidos, vai para final
+        if (this.enigmaService.getAllSolved()) {
+          console.log('All solved, going to final');
+          this.router.navigate(['/final']);
+          return;
+        }
+
         // Se não foi resolvido, só permite se for o próximo na sequência
         if (id === nextAllowed) {
           console.log('Enigma', id, 'is next allowed, allowing access');
@@ -81,7 +82,7 @@ export class EnigmaPageComponent implements OnInit {
         }
 
         // Caso contrário, redireciona para o último enigma resolvido ou para o próximo permitido
-        const lastSolvedId = solvedEnigmas.length > 0 ? Math.max(...solvedEnigmas) : 1;
+        const lastSolvedId = solvedEnigmas.length > 0 ? Math.max(...solvedEnigmas) : solvedEnigmas.length == 12 ? Math.max(...solvedEnigmas) : 1;
         console.log('Redirecting to last solved or allowed:', lastSolvedId);
         this.router.navigate(['/enigma', lastSolvedId + 1], { replaceUrl: true });
       }

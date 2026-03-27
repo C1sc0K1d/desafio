@@ -21,7 +21,7 @@ export class EnigmaService {
       id: 1,
       letter: 'c',
       type: 'riddle',
-      question: 'Sou um espelho, e na maioria da vezes só mostro o que deseja ver, as vezes mostro a verdade, mas nem sempre é o que você quer. O que sou?',
+      question: 'Sou um espelho, e na maioria da vezes só mostro o que deseja ver, as vezes mostro a verdade, mas nem sempre é o que você quer ver. O que sou?',
       answer: 'tela',
       hint: 'KKKK, achou mesmo que teria dica?'
     },
